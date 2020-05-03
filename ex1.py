@@ -91,8 +91,11 @@ class HandleInput():
         self.stop = False
         while not self.stop:
             self.user_input = input().split(" ")
-            action_number = int(self.user_input[0])
-            actions[action_number]()
+            try:
+                action_number = int(self.user_input[0])
+                actions[action_number]()
+            except:
+                pass
         
     def create_tree(self):
         self.tree_leaves = self.user_input[1:]
