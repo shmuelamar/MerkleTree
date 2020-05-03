@@ -9,6 +9,9 @@ def hash_function(value):
 
 
 class MerkleTree:
+    """
+    Represents a merkle tree
+    """
     def __init__(self, strings):
         self.value = None
         self.left = None
@@ -17,6 +20,9 @@ class MerkleTree:
 
         
     def build_tree(self, strings):
+        """
+        Builds tree structure from list of strings
+        """
         if len(strings) == 1:
             self.value = strings[0]
         else:
@@ -28,14 +34,15 @@ class MerkleTree:
             
             
     def create_proof(self, node_value):
-        
+        """
+        Creates a proof for a node
+        """
         if self.value == node_value:
             return ""
         
         res = None
         if self.right != None:
             res = self.right.create_proof(node_value)
-            
             if res != None and self.left != None:
                 if res != "":
                     res += " "
@@ -52,6 +59,9 @@ class MerkleTree:
         
         
     def check_proof(args):
+        """
+        Checks proof
+        """
         res = args[0]
         for i in range(2, len(args)):
             if i % 2 == 1:
@@ -73,6 +83,9 @@ class HandleInput():
         self.tree_leaves = None
         
     def start(self):
+        """
+        Start getting input from user
+        """
         actions = {1 : self.create_tree, 2 : self.create_proof, 3 : self.check_proof, 4 : self.set_hardness, 5 : self.quit}
         
         self.stop = False
@@ -94,14 +107,16 @@ class HandleInput():
         print(MerkleTree.check_proof(self.user_input[1:]))
     
     def set_hardness(self):
+        # no merkle tree root
         if self.merkle_tree == None:
             return
+        # get the hardness from user input
         hardness = int(self.user_input[1])
         value = self.merkle_tree.value
         
         i = 0
         while True:
-            
+            #hash the root plus a number
             res = str(hash_function(str(i) + value))
             counter = 0
             for j in res:
