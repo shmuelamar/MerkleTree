@@ -3,13 +3,20 @@ from glob import glob
 
 
 def assert_output(input_data, expected_stdout):
-    res = subprocess.run(['python', 'ex1.py'], input='\n'.join(input_data).encode(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    res = subprocess.run(
+        ['python', 'ex1.py'],
+        input='\n'.join(input_data).encode(),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
     assert not res.stderr, res.stderr.decode()
     assert res.returncode == 0
 
     lines = res.stdout.decode().splitlines()
     for i, (outline, expected_line) in enumerate(zip(lines, expected_stdout)):
-        assert outline == expected_line, f'wrong input line {i}, expected:\n{expected_line!r}\nbut got:\n{outline}'
+        assert (
+            outline == expected_line
+        ), f'wrong input line {i}, expected:\n{expected_line!r}\nbut got:\n{outline}'
     assert len(lines) == len(expected_stdout)
 
 
@@ -22,6 +29,13 @@ def test_outputs():
             outputs = lines[1::2]
 
         assert_output(inputs, outputs)
+
+
+def test_header():
+    with open('ex1.py') as fp:
+        names = next(fp)
+    assert names.count(',') == 3
+    assert names.startswith('#')
 
 
 if __name__ == '__main__':
